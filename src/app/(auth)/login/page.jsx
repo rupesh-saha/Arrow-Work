@@ -3,17 +3,51 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {Button} from "@heroui/react";
-import {Icon} from "@iconify/react";
+import { useRouter } from 'next/navigation';
+import { Button, FieldError, Form, Input, Label, TextField } from "@heroui/react";
+import { Icon } from "@iconify/react";
+import { signIn } from '@/lib/auth-client';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // BetterAuth login logic will go here
-    console.log('Login attempt:', { email, password });
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email');
+    const password = formData.get('password');
+
+    const { data, error } = await signIn.email({
+      email,
+      password,
+    });
+
+    setIsLoading(false);
+
+    if (error) {
+      alert(`Login failed: ${error.message}`);
+      return;
+    }
+
+    const role = data?.user?.role;
+
+    if (role === 'admin') {
+      router.push('/dashboard/admin');
+    } else if (role === 'freelancer') {
+      router.push('/dashboard/freelancer');
+    } else {
+      router.push('/');
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    await signIn.social({
+      provider: "google",
+      callbackURL: "/"
+    });
   };
 
   return (
@@ -40,6 +74,7 @@ const LoginPage = () => {
         </div>
       </div>
 
+      {/* --- Right Half: Login Form --- */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-[420px]">
 
@@ -53,51 +88,67 @@ const LoginPage = () => {
             />
           </Link>
 
-          {/* Header */}
           <h1 className="text-5xl font-bold text-gray-900 mb-2">Welcome back</h1>
           <p className="text-[#62646a] text-sm mb-8 font-medium">
             Please enter your details to sign in.
           </p>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <Form className="flex flex-col gap-5" onSubmit={handleLogin} validationBehavior="native">
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1.5">
+            <TextField
+              isRequired
+              name="email"
+              type="email"
+              validate={(value) => {
+                if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+                  return "Please enter a valid email address";
+                }
+                return null;
+              }}
+            >
+              <Label className="text-sm font-semibold text-gray-900">
                 Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="freelancer@arrow.com"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all text-sm"
-              />
-            </div>
+              </Label>
+              <Input placeholder="freelancer@arrow.com" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white" />
+              <FieldError className="text-red-500 text-xs mt-1" />
+            </TextField>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1.5">
+            <TextField
+              isRequired
+              name="password"
+              type="password"
+            >
+              <Label className="text-sm font-semibold text-gray-900">
                 Password <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all text-sm"
-              />
-            </div>
+              </Label>
+              <Input placeholder="Enter your password" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white" />
+              <FieldError className="text-red-500 text-xs mt-1" />
+            </TextField>
 
-            <div className="flex items-center gap-3 pt-2">
-              <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors text-sm shadow-sm">
-                Log In
+            <div className="flex items-center gap-3 pt-2 w-full">
+              <Button
+                type="submit"
+                isDisabled={isLoading}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors text-sm shadow-sm h-[48px]"
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Icon icon="eos-icons:loading" className="text-xl animate-spin" />
+                    Logging in...
+                  </div>
+                ) : (
+                  "Log In"
+                )}
               </Button>
-              <Button type="button" className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl transition-colors text-sm">
+
+              <Button
+                type="reset"
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl transition-colors text-sm h-[48px]"
+              >
                 Reset Credentials
               </Button>
             </div>
-          </form>
+          </Form>
 
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
@@ -110,7 +161,7 @@ const LoginPage = () => {
             </div>
           </div>
 
-          <Button className="w-full flex items-center justify-center gap-2 font-semibold h-10 rounded-xl text-gray-700 border border-gray-200" variant="tertiary">
+          <Button onPress={handleGoogleLogin} className="w-full flex items-center justify-center gap-2 font-semibold h-12 rounded-xl text-gray-700 border border-gray-200" variant="tertiary">
             <Icon icon="devicon:google" className="text-xl" />
             Sign in with Google
           </Button>

@@ -6,38 +6,54 @@ import Link from 'next/link';
 import { Button, Description, FieldError, Form, Input, Label, TextField } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from 'framer-motion';
+import { signUp, signIn } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
   const [isFreelancer, setIsFreelancer] = useState(false);
   const [imageInputType, setImageInputType] = useState('url');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = {};
+    setIsLoading(true);
 
-    formData.forEach((value, key) => {
-      data[key] = value.toString();
-    });
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
 
     const finalRole = isFreelancer ? 'freelancer' : 'client';
 
-    const payload = {
-      name: data.name,
+    const { data: authData, error } = await signUp.email({
       email: data.email,
-      image: data.image,
       password: data.password,
-      role: finalRole
-    };
+      name: data.name,
+      image: data.image,
+      role: finalRole,
+      skills: isFreelancer && data.skills ? data.skills.split(',').map(s => s.trim()) : undefined,
+      hourlyRate: isFreelancer ? Number(data.hourlyRate) : undefined,
+      bio: isFreelancer ? data.bio : undefined,
+    });
 
-    // Append extra fields ONLY if they registered as a freelancer
-    if (isFreelancer) {
-      payload.skills = data.skills ? data.skills.split(',').map(s => s.trim()) : [];
-      payload.hourlyRate = Number(data.hourlyRate);
-      payload.bio = data.bio || "";
+    setIsLoading(false);
+
+    if (error) {
+      alert(`Registration failed: ${error.message}`);
+      return;
     }
 
-    alert(`Form submitted with:\n${JSON.stringify(payload, null, 2)}`);
+    if (finalRole === 'freelancer') {
+      router.push('/dashboard/freelancer');
+    } else {
+      router.push('/');
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    await signIn.social({
+      provider: "google",
+      callbackURL: "/"
+    });
   };
 
   return (
@@ -62,7 +78,7 @@ const RegisterPage = () => {
         </div>
       </div>
 
-      {/* --- Right Half: Registration Form --- */}
+
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 overflow-y-auto">
         <div className="w-full max-w-[440px] py-8">
 
@@ -77,6 +93,7 @@ const RegisterPage = () => {
 
           <div className="mb-8">
             <Button
+              onPress={handleGoogleLogin}
               className="w-full flex items-center justify-center gap-2 font-semibold h-12 rounded-xl text-gray-700 border border-gray-200 hover:bg-gray-50 bg-white"
               variant="tertiary"
             >
@@ -123,7 +140,6 @@ const RegisterPage = () => {
               <FieldError className="text-red-500 text-xs mt-1" />
             </TextField>
 
-            {/* --- Profile Image Section (Now required for all users) --- */}
             <div className="flex flex-col gap-2">
               <Label className="text-sm font-semibold text-gray-900">
                 Profile Image <span className="text-red-500">*</span>
@@ -170,7 +186,6 @@ const RegisterPage = () => {
                 </div>
               )}
             </div>
-            {/* --- End of Profile Image Section --- */}
 
             <TextField
               isRequired
@@ -192,6 +207,7 @@ const RegisterPage = () => {
 
             <div className={`p-4 mt-2 border rounded-xl flex items-start gap-3 transition-colors ${isFreelancer ? 'bg-blue-50/50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
               <div className="flex items-center h-5">
+
                 <input
                   id="isFreelancer"
                   name="isFreelancer"
@@ -211,7 +227,6 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            {/* Dynamic Freelancer Fields */}
             <AnimatePresence>
               {isFreelancer && (
                 <motion.div
@@ -252,12 +267,31 @@ const RegisterPage = () => {
               )}
             </AnimatePresence>
 
-            <Button
-              type="submit"
-              className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 px-4 rounded-xl transition-colors h-12 mt-2 shadow-md"
-            >
-              Create Account
-            </Button>
+            <div className="flex items-center gap-3 pt-2 w-full">
+              <Button 
+                type="submit" 
+                isDisabled={isLoading} 
+                className="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-3 px-4 rounded-xl transition-colors h-12 shadow-md"
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Icon icon="eos-icons:loading" className="text-xl animate-spin" />
+                    Creating Account...
+                  </div>
+                ) : (
+                  "Create Account"
+                )}
+              </Button>
+
+              <Button 
+                type="reset" 
+                onPress={() => setIsFreelancer(false)} // Need to manually reset the React state checkbox
+                className="flex-[0.4] bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl transition-colors text-sm h-12"
+              >
+                Reset
+              </Button>
+            </div>
+            
           </Form>
 
           <p className="text-center text-sm text-gray-600 mt-8 font-medium">
