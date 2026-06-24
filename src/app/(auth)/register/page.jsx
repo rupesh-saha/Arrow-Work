@@ -9,9 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const RegisterPage = () => {
   const [isFreelancer, setIsFreelancer] = useState(false);
-
-  // UI-only state for toggling the image input view
-  const [imageInputType, setImageInputType] = useState('url'); // 'url' | 'upload'
+  const [imageInputType, setImageInputType] = useState('url');
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -27,12 +25,13 @@ const RegisterPage = () => {
     const payload = {
       name: data.name,
       email: data.email,
+      image: data.image,
       password: data.password,
       role: finalRole
     };
 
+    // Append extra fields ONLY if they registered as a freelancer
     if (isFreelancer) {
-      payload.image = data.image; // This will grab the URL input when you wire it up later
       payload.skills = data.skills ? data.skills.split(',').map(s => s.trim()) : [];
       payload.hourlyRate = Number(data.hourlyRate);
       payload.bio = data.bio || "";
@@ -44,7 +43,6 @@ const RegisterPage = () => {
   return (
     <div className="flex min-h-[calc(100vh-80px)] bg-white">
 
-      {/* --- Left Half: Image & Branding --- */}
       <div className="hidden lg:flex w-1/2 relative overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=2094&auto=format&fit=crop"
@@ -77,7 +75,6 @@ const RegisterPage = () => {
             Enter your details below to get started.
           </p>
 
-          {/* Google OAuth Section (Clients Only) */}
           <div className="mb-8">
             <Button
               className="w-full flex items-center justify-center gap-2 font-semibold h-12 rounded-xl text-gray-700 border border-gray-200 hover:bg-gray-50 bg-white"
@@ -102,10 +99,8 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          {/* Form */}
           <Form className="flex flex-col gap-5" onSubmit={onSubmit} validationBehavior="native">
 
-            {/* Standard Client Fields */}
             <TextField isRequired name="name" type="text">
               <Label className="text-sm font-semibold text-gray-900">Full Name</Label>
               <Input placeholder="Jane Doe" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white" />
@@ -128,6 +123,7 @@ const RegisterPage = () => {
               <FieldError className="text-red-500 text-xs mt-1" />
             </TextField>
 
+            {/* --- Profile Image Section (Now required for all users) --- */}
             <div className="flex flex-col gap-2">
               <Label className="text-sm font-semibold text-gray-900">
                 Profile Image <span className="text-red-500">*</span>
@@ -138,8 +134,8 @@ const RegisterPage = () => {
                   type="button"
                   onClick={() => setImageInputType('url')}
                   className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all duration-200 ${imageInputType === 'url'
-                      ? 'bg-white shadow-sm text-gray-900'
-                      : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white shadow-sm text-gray-900'
+                    : 'text-gray-500 hover:text-gray-700'
                     }`}
                 >
                   Link URL
@@ -148,8 +144,8 @@ const RegisterPage = () => {
                   type="button"
                   onClick={() => setImageInputType('upload')}
                   className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all duration-200 ${imageInputType === 'upload'
-                      ? 'bg-white shadow-sm text-gray-900'
-                      : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white shadow-sm text-gray-900'
+                    : 'text-gray-500 hover:text-gray-700'
                     }`}
                 >
                   Upload Image
@@ -158,7 +154,7 @@ const RegisterPage = () => {
 
               {imageInputType === 'url' ? (
                 <Input
-                  isRequired={isFreelancer}
+                  required
                   name="image"
                   type="url"
                   placeholder="https://example.com/my-photo.jpg"
@@ -174,6 +170,7 @@ const RegisterPage = () => {
                 </div>
               )}
             </div>
+            {/* --- End of Profile Image Section --- */}
 
             <TextField
               isRequired
@@ -193,7 +190,6 @@ const RegisterPage = () => {
               <FieldError className="text-red-500 text-xs mt-1" />
             </TextField>
 
-            {/* Role Selection Checkbox */}
             <div className={`p-4 mt-2 border rounded-xl flex items-start gap-3 transition-colors ${isFreelancer ? 'bg-blue-50/50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
               <div className="flex items-center h-5">
                 <input
