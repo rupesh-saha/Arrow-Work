@@ -122,12 +122,12 @@ export default function ClientDashboardPage() {
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Ready to get work done?</h2>
           <p className="text-gray-500 max-w-md mx-auto mb-6 text-sm">
-            Post a task to start receiving proposals from top-tier freelancers instantly.
+            You don't have any active tasks right now. Post a task to start receiving proposals from top-tier freelancers instantly.
           </p>
           <Link  
             href="/dashboard/client/post-task"
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-xl shadow-sm transition-colors">
-            Post Your Task
+            Post Your First Task
           </Link>
         </div>
       </motion.div>

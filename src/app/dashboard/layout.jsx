@@ -21,7 +21,7 @@ const getNavLinks = (role) => {
   if (role === 'freelancer') {
     return [
       { name: 'Overview', href: '/dashboard/freelancer', icon: 'lucide:layout-dashboard' },
-      { name: 'Browse Tasks', href: '/dashboard/freelancer/browse', icon: 'lucide:search' },
+      { name: 'Browse Tasks', href: '/browse-tasks', icon: 'lucide:search' },
       { name: 'My Proposals', href: '/dashboard/freelancer/proposals', icon: 'lucide:file-text' },
       { name: 'Active Projects', href: '/dashboard/freelancer/active', icon: 'lucide:play-circle' },
       { name: 'My Earnings', href: '/dashboard/freelancer/earnings', icon: 'lucide:wallet' },
