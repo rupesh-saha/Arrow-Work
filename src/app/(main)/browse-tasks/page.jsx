@@ -11,7 +11,6 @@ export default function BrowseTasksPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
 
-  // Fetch all tasks
   useEffect(() => {
     const fetchTasks = async () => {
       const response = await fetch(`http://localhost:5001/api/tasks`);
@@ -60,10 +59,8 @@ export default function BrowseTasksPage() {
           Find the perfect freelance job. Filter by category, search for specific skills, and submit your proposal to clients worldwide.
         </p>
 
-        {/* Filter Bar using pure Tailwind HTML */}
         <div className="flex flex-col sm:flex-row gap-4 mt-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           
-          {/* Custom Search Input */}
           <div className="relative w-full sm:w-2/3">
             <Icon icon="lucide:search" className="absolute left-4 top-3.5 text-gray-400 text-xl" />
             <input 
@@ -75,7 +72,6 @@ export default function BrowseTasksPage() {
             />
           </div>
           
-          {/* Custom Category Dropdown */}
           <div className="relative w-full sm:w-1/3">
             <select 
               className="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-gray-400 appearance-none cursor-pointer text-sm font-medium text-gray-700 transition-colors"
@@ -95,7 +91,6 @@ export default function BrowseTasksPage() {
         </div>
       </motion.div>
 
-      {/* --- TASKS GRID --- */}
       {filteredTasks?.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
           <Icon icon="lucide:search-x" className="text-6xl text-gray-300 mx-auto mb-4" />
@@ -112,10 +107,8 @@ export default function BrowseTasksPage() {
           {filteredTasks.map((task) => (
             <motion.div key={task._id} variants={itemVariants}>
               
-              {/* Pure HTML/Tailwind Card to replace HeroUI Card */}
               <div className="h-full flex flex-col rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-gray-300 transition-all duration-300 bg-white group overflow-hidden">
                 
-                {/* Card Header */}
                 <div className="flex justify-between items-start pt-6 px-6 pb-0">
                   <span className="bg-blue-50 text-blue-600 font-bold px-3 py-1 rounded-full tracking-wide text-[10px] uppercase">
                     {task.category}
@@ -125,7 +118,6 @@ export default function BrowseTasksPage() {
                   </h3>
                 </div>
 
-                {/* Card Body */}
                 <div className="px-6 py-4 flex-grow">
                   <h4 className="text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
                     {task.title}
@@ -138,7 +130,6 @@ export default function BrowseTasksPage() {
                   </div>
                 </div>
 
-                {/* Card Footer */}
                 <div className="px-6 pb-6 pt-0 flex items-center justify-between mt-auto gap-4">
                   <div className="flex items-center gap-1.5 text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
                     <Icon icon="lucide:calendar-clock" className="text-sm" />
@@ -147,15 +138,9 @@ export default function BrowseTasksPage() {
                     </span>
                   </div>
                   
-                  {/* Keep HeroUI Button as it works perfectly */}
-                  <Button 
-                    as={Link} 
-                    href={`/browse-tasks/${task._id}`}
-                    className="bg-gray-900 text-white font-bold px-5 hover:bg-blue-600 transition-colors shadow-md"
-                    endContent={<Icon icon="lucide:arrow-right" />}
-                  >
-                    Details
-                  </Button>
+                  <Link href={`/browse-tasks/${task._id}`} className="bg-gray-900 text-white font-bold px-5 py-2 hover:bg-blue-600 transition-colors shadow-md rounded-xl flex items-center gap-2">
+                    Details <Icon icon="lucide:arrow-right" />
+                  </Link>
                 </div>
 
               </div>

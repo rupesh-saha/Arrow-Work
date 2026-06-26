@@ -58,7 +58,7 @@ export default function FreelancersClient({ initialFreelancers }) {
               </div>
 
               <Link 
-                href={`/freelancers/${freelancer._id}`}
+                href={`/browse-freelancers/${freelancer._id}`}
                 className="w-full py-2 rounded-lg border border-gray-200 text-gray-900 hover:bg-gray-50 font-semibold transition-colors text-sm inline-block"
               >
                 View Profile

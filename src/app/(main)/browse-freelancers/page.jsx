@@ -8,6 +8,5 @@ export default async function BrowseFreelancersPage() {
 
   const initialFreelancers = response.ok ? await response.json() : [];
 
-  // 3. Pass to client
   return <FreelancersClient initialFreelancers={initialFreelancers}/>;
 }
