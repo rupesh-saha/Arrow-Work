@@ -8,7 +8,7 @@ export default async function ClientDashboardPage() {
   const email = session?.user?.email;
   const userName = session?.user?.name || 'Client';
 
-  const res = email ? await fetch(`http://localhost:5001/api/dashboard/client/${email}`, { cache: "no-store" }) : null;
+  const res = email ? await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/dashboard/client/${email}`, { cache: "no-store" }) : null;
   
   const stats = res?.ok ? await res.json() : { totalTasks: 0, openTasks: 0, inProgressTasks: 0, totalSpent: 0 };
 

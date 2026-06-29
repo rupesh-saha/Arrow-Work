@@ -22,7 +22,7 @@ export default function MyTasksPage() {
     if (!session?.user?.email) return;
     
     const fetchTasks = async () => {
-      const response = await fetch(`http://localhost:5001/api/tasks?email=${session.user.email}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/tasks?email=${session.user.email}`);
       if (response.ok) {
         const data = await response.json();
         setTasks(Array.isArray(data) ? data : []);
@@ -40,7 +40,7 @@ export default function MyTasksPage() {
 
     const payload = { ...data, budget: Number(data.budget) };
 
-    const response = await fetch(`http://localhost:5001/api/tasks/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/tasks/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -52,7 +52,7 @@ export default function MyTasksPage() {
   };
 
   const handleDelete = async (id) => {
-    const response = await fetch(`http://localhost:5001/api/tasks/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/tasks/${id}`, {
       method: 'DELETE',
     });
 

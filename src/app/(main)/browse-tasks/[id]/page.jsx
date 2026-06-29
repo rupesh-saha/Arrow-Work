@@ -3,7 +3,7 @@ import TaskDetailsClient from "@/components/TaskDetailsClient";
 const TaskDetailsPage = async ({params}) => {
   const {id} = await params;
 
-  const response = await fetch(`http://localhost:5001/api/tasks/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/tasks/${id}`, {
     cache: "no-store",
   });
 

@@ -3,7 +3,7 @@ import FreelancerProfileClient from "@/components/FreelancerProfileClient";
 const FreelancerProfilePage = async ({params}) => {
   const { id } = await params;
 
-  const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/users/${id}`, {
     cache: "no-store",
   });
 

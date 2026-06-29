@@ -47,7 +47,7 @@ const TaskDetailsClient = ({ task }) => {
       cover_note: data.cover_note,
     };
 
-    const response = await fetch('http://localhost:5001/api/proposals', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/proposals`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

@@ -22,7 +22,7 @@ export default async function Success({ searchParams }) {
     
     
     try {
-      await fetch('http://localhost:5001/api/payments/process', {
+      await fetch('${process.env.NEXT_PUBLIC_BASE_URI}/api/payments/process', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

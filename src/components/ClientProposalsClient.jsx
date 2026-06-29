@@ -37,7 +37,7 @@ export default function ClientProposalsClient({ initialProposals }) {
   };
 
   const handleReject = async (proposalId) => {
-    const response = await fetch(`http://localhost:5001/api/proposals/${proposalId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/proposals/${proposalId}`, {
       method: 'DELETE'
     });
 
