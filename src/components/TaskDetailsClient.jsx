@@ -65,12 +65,10 @@ const TaskDetailsClient = ({ task }) => {
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-8 min-h-screen">
       
-      {/* Navigation Breadcrumb */}
       <Link href="/browse-tasks" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 mb-8 transition-colors">
         <Icon icon="lucide:arrow-left" /> Back to all tasks
       </Link>
 
-      {/* --- PAGE HEADER --- */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <span className="bg-gray-100 text-gray-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wide">
@@ -87,10 +85,8 @@ const TaskDetailsClient = ({ task }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* --- LEFT COLUMN: DESCRIPTION & FORM --- */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Description Block */}
           <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Description</h2>
             <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">
@@ -98,7 +94,6 @@ const TaskDetailsClient = ({ task }) => {
             </p>
           </div>
 
-          {/* Proposal Form (ONLY visible to Freelancers) */}
           {isFreelancer && (
             <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
               <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
