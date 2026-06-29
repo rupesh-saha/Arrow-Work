@@ -1,11 +1,8 @@
-import React from 'react';
+import AdminDashboardClient from "@/components/AdminDashboardClient";
 
-const AdminDashboard = () => {
-  return (
-    <div>
-      admin
-    </div>
-  );
-};
+export default async function AdminDashboardPage() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/admin/stats`, { cache: "no-store" });
+  const data = res.ok ? await res.json() : null;
 
-export default AdminDashboard;
+  return <AdminDashboardClient data={data} />;
+}
