@@ -22,7 +22,7 @@ export default function MyTasksPage() {
     if (!session?.user?.email) return;
     
     const fetchTasks = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/tasks?email=${session.user.email}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/tasks/client/${session.user.email}`);
       if (response.ok) {
         const data = await response.json();
         setTasks(Array.isArray(data) ? data : []);
