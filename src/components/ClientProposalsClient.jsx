@@ -12,9 +12,9 @@ export default function ClientProposalsClient({ initialProposals }) {
     const response = await fetch(`http://localhost:5001/api/proposals/${proposalId}/accept`, {
       method: 'PATCH'
     });
-    
+
     if (response.ok) {
-      setProposals(proposals.map(p => 
+      setProposals(proposals.map(p =>
         p._id === proposalId ? { ...p, status: 'Accepted' } : p
       ));
     }
@@ -24,7 +24,7 @@ export default function ClientProposalsClient({ initialProposals }) {
     const response = await fetch(`http://localhost:5001/api/proposals/${proposalId}`, {
       method: 'DELETE'
     });
-    
+
     if (response.ok) {
       setProposals(proposals.filter(p => p._id !== proposalId));
     }
@@ -32,7 +32,7 @@ export default function ClientProposalsClient({ initialProposals }) {
 
   return (
     <div className="max-w-5xl pb-10">
-      
+
       <div className="mb-8">
         <h1 className="text-3xl font-black text-gray-900 tracking-tight">Manage Proposals</h1>
         <p className="text-gray-500 mt-1 font-medium">Review and respond to freelancer proposals.</p>
@@ -49,20 +49,19 @@ export default function ClientProposalsClient({ initialProposals }) {
       ) : (
         <div className="flex flex-col gap-5">
           {proposals.map((proposal) => (
-            
+
             <div key={proposal._id} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-              
+
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                
+
                 <div className="flex-1 space-y-3">
-                  
+
                   <div className="flex items-center gap-3">
                     <h2 className="text-lg font-bold text-gray-900">{proposal.task_title}</h2>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${
-                      proposal.status === 'Accepted' 
-                        ? 'bg-green-100 text-green-700' 
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${proposal.status === 'Accepted'
+                        ? 'bg-green-100 text-green-700'
                         : 'bg-yellow-100 text-yellow-700'
-                    }`}>
+                      }`}>
                       {proposal.status || 'Pending'}
                     </span>
                   </div>
@@ -93,14 +92,18 @@ export default function ClientProposalsClient({ initialProposals }) {
 
                 {proposal.status !== 'Accepted' && (
                   <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 pt-1">
-                    
-                    <button onClick={() => handleAccept(proposal._id)} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm shadow-sm">
-                      <Icon icon="lucide:check" className="text-lg" /> Accept
-                    </button>
-                    
+
+                    <form action="/api/checkout_sessions" method="POST">
+                      <section>
+                        <button type="submit" role="link" className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm shadow-sm">
+                          <Icon icon="lucide:check" className="text-lg" /> Accept
+                        </button>
+                      </section>
+                    </form>
+
                     <AlertDialog>
-                      <Button 
-                        variant="danger" 
+                      <Button
+                        variant="danger"
                         className="flex-1 md:flex-none bg-white border border-red-200 text-red-500 hover:bg-red-50 font-bold py-2 px-6 rounded-lg transition-colors text-sm h-auto data-[hover=true]:opacity-100"
                       >
                         <Icon icon="lucide:x" className="text-lg" /> Reject
@@ -123,9 +126,9 @@ export default function ClientProposalsClient({ initialProposals }) {
                               <Button slot="close" variant="tertiary" className="font-bold">
                                 Cancel
                               </Button>
-                              <Button 
-                                slot="close" 
-                                variant="danger" 
+                              <Button
+                                slot="close"
+                                variant="danger"
                                 className="bg-red-600 text-white font-bold"
                                 onPress={() => handleReject(proposal._id)}
                               >
