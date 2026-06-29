@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Icon } from "@iconify/react";
+import Image from 'next/image';
 
 const FreelancerProfileClient = ({freelancer}) => {
   if (!freelancer) {
@@ -22,26 +23,21 @@ const FreelancerProfileClient = ({freelancer}) => {
   return (
     <div className="max-w-4xl mx-auto p-6 md:p-8 min-h-screen">
 
-      {/* Navigation Breadcrumb */}
       <Link href="/browse-freelancers" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 mb-8 transition-colors">
         <Icon icon="lucide:arrow-left" /> Back to all freelancers
       </Link>
 
-      {/* --- PROFILE HEADER CARD --- */}
       <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden mb-8">
 
-        {/* Cover Photo / Header Gradient */}
         <div className="h-32 bg-gradient-to-r from-gray-900 to-gray-700 w-full relative"></div>
 
         <div className="px-8 pb-8">
 
-          {/* Changed layout: No negative margin on the wrapper, just standard flex */}
           <div className="flex flex-col md:flex-row gap-6 relative z-10">
             
-            {/* Avatar - Negative margin applied ONLY here to pull it up into the banner */}
             <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-100 shadow-md overflow-hidden flex-shrink-0 -mt-16 mx-auto md:mx-0">
               {freelancer.image ? (
-                <img src={freelancer.image} alt={freelancer.name} className="w-full h-full object-cover" />
+                <Image width={200} height={200} src={freelancer.image} alt={freelancer.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl font-bold bg-blue-50 text-blue-600">
                   {freelancer.name?.charAt(0).toUpperCase() || "U"}
@@ -49,12 +45,10 @@ const FreelancerProfileClient = ({freelancer}) => {
               )}
             </div>
 
-            {/* Basic Info */}
             <div className="mt-2 text-center md:text-left">
               <h1 className="text-3xl font-black text-gray-900">{freelancer.name}</h1>
               <p className="text-gray-500 font-medium text-lg mt-1 capitalize">{freelancer.role || 'Freelancer'}</p>
 
-              {/* Rating & Location Row */}
               <div className="flex items-center justify-center md:justify-start gap-4 mt-3 text-sm">
                 <div className="flex items-center gap-1 text-yellow-500 font-bold">
                   <Icon icon="lucide:star" className="fill-current text-lg" />
@@ -68,16 +62,13 @@ const FreelancerProfileClient = ({freelancer}) => {
               </div>
             </div>
             
-            {/* The Invite and Mail buttons were completely removed from here! */}
 
           </div>
         </div>
       </div>
 
-      {/* --- PROFILE BODY GRID --- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-        {/* Main Content Column (Left side) */}
         <div className="md:col-span-2 space-y-8">
 
           {/* About Section */}
@@ -92,10 +83,8 @@ const FreelancerProfileClient = ({freelancer}) => {
 
         </div>
 
-        {/* Sidebar Column (Right side) */}
         <div className="space-y-8">
 
-          {/* Pricing & Availability */}
           <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Details</h2>
 

@@ -3,26 +3,25 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Label, TextField } from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { useRouter } from 'next/navigation';
 
 export default function ProfileFreelancer({ userProfile, email }) {
   const [isSaving, setIsSaving] = useState(false);
   const [msg, setMsg] = useState("");
+  const router = useRouter();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsSaving(true);
     
-    // 1. Magically extract all inputs at once using native FormData!
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    // 2. Turn the comma-separated string back into an array for MongoDB
     const payload = {
       ...data,
       skills: data.skills ? data.skills.split(',').map(s => s.trim()) : [],
     };
 
-    // 3. Send it to the backend
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/users/profile/${email}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -32,7 +31,8 @@ export default function ProfileFreelancer({ userProfile, email }) {
     setIsSaving(false);
     if (response.ok) {
       setMsg("Profile updated successfully!");
-      setTimeout(() => setMsg(""), 3000);
+      router.refresh();
+      setTimeout(() => setMsg(""), 1000);
     }
   };
 
@@ -82,7 +82,7 @@ export default function ProfileFreelancer({ userProfile, email }) {
           <Button 
             type="submit" 
             disabled={isSaving}
-            className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl mt-2"
+            className="w-full h-12 bg-gray-900 hover:bg-black text-white font-bold rounded-xl mt-2"
           >
             {isSaving ? "Saving..." : "Save Profile"}
           </Button>

@@ -40,20 +40,16 @@ const Hero = () => {
               className="absolute inset-0 w-full h-full bg-cover bg-center" 
               style={{ backgroundImage: `url(${imgUrl})` }} 
             />
-            {/* FIX 1: Solid dark overlay on mobile, gradient on desktop for perfect contrast */}
             <div className="absolute inset-0 bg-black/65 md:bg-gradient-to-r md:from-gray-900/95 md:via-gray-900/70 md:to-transparent" />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* --- Framer Motion Animated Overlay --- */}
-      {/* FIX 2: Centered on mobile (justify-center), left-aligned on desktop (md:justify-start) */}
       <div className="absolute inset-0 z-10 flex items-center justify-center md:justify-start">
         <div className="max-w-[1400px] mx-auto w-full px-6 md:px-8 text-center md:text-left">
           
           <div className="max-w-2xl text-white mx-auto md:mx-0">
             
-            {/* FIX 3: Bulletproof animations using direct initial/animate & optimized text sizing */}
             <motion.h1 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -79,7 +75,6 @@ const Hero = () => {
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
             >
-              {/* Mandatory Rubric Action Buttons */}
               <Link 
                 href="/dashboard/client" 
                 className="flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 font-bold h-12 px-8 rounded-md transition-all duration-200 text-base sm:text-lg shadow-lg hover:shadow-xl w-full sm:w-auto"

@@ -52,7 +52,7 @@ export default function EarningsClient({ earningsData }) {
               <h2 className="text-3xl font-black text-gray-900">${averagePerTask.toFixed(2)}</h2>
               <p className="text-xs text-gray-400 mt-2 font-medium">Average earning per completed task</p>
             </div>
-            <div className="w-12 h-12 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center text-xl">
+            <div className="w-12 h-12 bg-orange-50 text-blue-700 rounded-xl flex items-center justify-center text-xl">
               <Icon icon="lucide:trending-up" />
             </div>
           </div>
