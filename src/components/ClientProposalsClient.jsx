@@ -3,20 +3,36 @@
 import React, { useState } from 'react';
 import { Icon } from "@iconify/react";
 import { AlertDialog, Button } from "@heroui/react";
+import { useSession } from '@/lib/auth-client';
 
 export default function ClientProposalsClient({ initialProposals }) {
 
   const [proposals, setProposals] = useState(initialProposals);
 
-  const handleAccept = async (proposalId) => {
-    const response = await fetch(`http://localhost:5001/api/proposals/${proposalId}/accept`, {
-      method: 'PATCH'
-    });
+  const { data: session } = useSession(); 
 
-    if (response.ok) {
-      setProposals(proposals.map(p =>
-        p._id === proposalId ? { ...p, status: 'Accepted' } : p
-      ));
+  const handleAcceptStripe = async (proposal) => {
+    try {
+      const response = await fetch('/api/checkout_sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proposal_id: proposal._id,
+          task_id: proposal.task_id,
+          title: proposal.task_title,
+          budget: proposal.proposed_budget,
+          freelancer_email: proposal.freelancer_email,
+          client_email: session?.user?.email || 'client@email.com'
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Stripe Checkout Error:", error);
     }
   };
 
@@ -59,8 +75,8 @@ export default function ClientProposalsClient({ initialProposals }) {
                   <div className="flex items-center gap-3">
                     <h2 className="text-lg font-bold text-gray-900">{proposal.task_title}</h2>
                     <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${proposal.status === 'Accepted'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-yellow-100 text-yellow-700'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-yellow-100 text-yellow-700'
                       }`}>
                       {proposal.status || 'Pending'}
                     </span>
@@ -93,13 +109,9 @@ export default function ClientProposalsClient({ initialProposals }) {
                 {proposal.status !== 'Accepted' && (
                   <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 pt-1">
 
-                    <form action="/api/checkout_sessions" method="POST">
-                      <section>
-                        <button type="submit" role="link" className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm shadow-sm">
-                          <Icon icon="lucide:check" className="text-lg" /> Accept
-                        </button>
-                      </section>
-                    </form>
+                    <button onClick={() => handleAcceptStripe(proposal)} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm shadow-sm">
+                      <Icon icon="lucide:check" className="text-lg" /> Accept
+                    </button>
 
                     <AlertDialog>
                       <Button
