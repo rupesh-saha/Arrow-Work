@@ -1,5 +1,6 @@
 import AdminDashboardClient from "@/components/AdminDashboardClient";
 import { auth } from "@/lib/auth";
+import { headers } from 'next/headers';
 
 export default async function AdminDashboardPage() {
   const token = await auth.api.getToken({
