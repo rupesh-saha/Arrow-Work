@@ -19,10 +19,10 @@ export default async function Success({ searchParams }) {
   }
 
   if (status === 'complete') {
-    
-    
+
+
     try {
-      await fetch('${process.env.NEXT_PUBLIC_BASE_URI}/api/payments/process', {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URI}/api/payments/process`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ export default async function Success({ searchParams }) {
     return (
       <div className="min-h-[70vh] bg-white flex flex-col items-center justify-center p-6">
         <div className="max-w-md w-full text-center">
-          
+
           <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
             <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-3xl font-black text-green-500">
               ✓
@@ -68,7 +68,7 @@ export default async function Success({ searchParams }) {
             </div>
           </div>
 
-          <Link 
+          <Link
             href="/dashboard/client"
             className="w-full inline-block text-center bg-gray-900 hover:bg-black text-white font-bold py-4 px-6 rounded-xl transition-colors shadow-sm"
           >

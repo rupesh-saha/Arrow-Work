@@ -8,7 +8,7 @@ export async function POST(req) {
     const { proposal_id, task_id, title, budget, freelancer_email, client_email } = body;
 
     const headersList = await headers()
-    const origin = headersList.get('origin')
+    const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_BASE_URI || 'https://arrow-work.vercel.app'
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
