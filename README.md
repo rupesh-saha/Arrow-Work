@@ -1,7 +1,5 @@
 # Arrow - Freelance Micro-Task Platform
 
-![Arrow Screenshot](./screenshot.png)
-
 **Live Site URL:** [https://arrow-work.vercel.app/](https://arrow-work.vercel.app/)
 
 ## 📖 Overview
